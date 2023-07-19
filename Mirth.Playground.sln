@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MirthSocketClient", "MirthS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{44D6B2B5-D04C-4F14-95FD-71C442500F77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MirthSocketServer", "MirthSocketServer\MirthSocketServer.csproj", "{D4772468-25AF-4FC8-BE09-9D50391E0E05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{44D6B2B5-D04C-4F14-95FD-71C442500F77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44D6B2B5-D04C-4F14-95FD-71C442500F77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44D6B2B5-D04C-4F14-95FD-71C442500F77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4772468-25AF-4FC8-BE09-9D50391E0E05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4772468-25AF-4FC8-BE09-9D50391E0E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4772468-25AF-4FC8-BE09-9D50391E0E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4772468-25AF-4FC8-BE09-9D50391E0E05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
