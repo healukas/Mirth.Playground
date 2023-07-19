@@ -60,6 +60,12 @@ static class Program
             
             Console.WriteLine($"Message {i}: {rawResponse.CheckAck()}");
             
+            // ack ack
+            var ack = new byte[4] { 0x0b, 0x06, 0x1c, 0x0d };
+            _ = client.SendAsync(ack, SocketFlags.None);
+            
+            Console.WriteLine($"Message {i}: Acknowledged ACK");
+            
             client.Disconnect(true);
             i++;
             Thread.Sleep(MsBetweenMessages);
