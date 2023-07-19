@@ -30,10 +30,11 @@ static class Program
         var ipEndpoint = new IPEndPoint(resolvedHost.AddressList.First(), Port);
         using Socket client = new(resolvedHost.AddressList.First().AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-        client.ConnectAsync(ipEndpoint);
         var i = 0;
         foreach (var message in messages)
         {
+            client.ConnectAsync(ipEndpoint);
+
             // convert message to binary
             var binaryMessage = message.Pack(false, true);
             
@@ -59,12 +60,7 @@ static class Program
             
             Console.WriteLine($"Message {i}: {rawResponse.CheckAck()}");
             
-            // ack ack
-            var ack = new byte[4] { 0x0b, 0x06, 0x1c, 0x0d };
-            _ = client.SendAsync(ack, SocketFlags.None);
-            
-            Console.WriteLine($"Message {i}: Acknowledged ACK");
-            
+            client.Disconnect(true);
             i++;
             Thread.Sleep(MsBetweenMessages);
         }
