@@ -4,38 +4,69 @@ using Utility;
 
 namespace MirthSocketClient;
 
-class Program
+static class Program
 {
+    private const int MsBetweenMessages = 1000;
+    private const string HostName = "localhost";
+    private const int Port = 16661;
+    private const bool Verbose = true;
+    private const int AmountOfMessages = 1;
+
     public static void Main()
     {
-        var messages = GetMessages(1);
+        var messages = GetMessages(AmountOfMessages);
         // setup
-        var ipAddr = IPAddress.Parse("127.0.0.1");
-        var ipEndpoint = new IPEndPoint(ipAddr, 16661);
-        using Socket client = new(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        Uri uri;
+        try
+        {
+            uri = new Uri(HostName);
+        }
+        catch (Exception)
+        {
+            uri = new Uri("http://" + HostName);
+        }
+        
+        var resolvedHost = Dns.GetHostEntry(uri.DnsSafeHost);
+        var ipEndpoint = new IPEndPoint(resolvedHost.AddressList.First(), Port);
+        using Socket client = new(resolvedHost.AddressList.First().AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
         client.ConnectAsync(ipEndpoint);
-
+        var i = 0;
         foreach (var message in messages)
         {
             // convert message to binary
             var binaryMessage = message.Pack(false, true);
-            // Console.WriteLine(binaryMessage.HexDump());
+            
+            if(Verbose)
+            {
+                Console.WriteLine($"Message {i} bytes:\n{binaryMessage.HexDump()}");
+            }
+            
             // send
             _ = client.SendAsync(binaryMessage,SocketFlags.None).Result;
+            Console.WriteLine($"Message {i} sent.");
             
             // wait for ack
             var responseBuffer = new byte[1024];
             var received = client.ReceiveAsync(responseBuffer, SocketFlags.None).Result;
             var rawResponse = new byte[received];
             Array.Copy(responseBuffer, 0, rawResponse, 0, received);
-            Console.WriteLine($"Received response of length: {received}");
-            Console.WriteLine(rawResponse.CheckAck());
+            if(Verbose)
+            {
+                Console.WriteLine($"Received response of length: {received}");
+                Console.WriteLine($"Response was:\n{rawResponse.HexDump()}");
+            }
+            
+            Console.WriteLine($"Message {i}: {rawResponse.CheckAck()}");
             
             // ack ack
             var ack = new byte[4] { 0x0b, 0x06, 0x1c, 0x0d };
             _ = client.SendAsync(ack, SocketFlags.None);
-            Thread.Sleep(1000);
+            
+            Console.WriteLine($"Message {i}: Acknowledged ACK");
+            
+            i++;
+            Thread.Sleep(MsBetweenMessages);
         }
         
     }
