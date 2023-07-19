@@ -11,7 +11,7 @@ This repo contains the following tools:
 - Utility: Contains a bunch of function to process binary payloads etc
 - Stack: A directory containing some exported channel definitions and a docker stack
   - The docker stack contains mirth, a database and a rest endpoint that simply logs all the requests it gets.
-- V2 Test.xml contains a channel configuration for 1 channel with 3 destinations
+- HL7V2_File_Rest_TCP.xml contains a channel configuration for 1 channel with 3 destinations
   1. A FileWriter
   2. A TCPSender
   3. A HTTPSender
@@ -19,14 +19,16 @@ This repo contains the following tools:
 
 
 ## Learnings
-### MLLP V2
-When using a TCP listener source with MLLP V2: set max retries to 0. Otherwise it destroys the SocketClient 
-
-### ACK
+### Sending
+#### ACK
 If you send a message, Mirth will send you 2 ACK messages
   1. The 4 byte version (0x0B, 0x06, 0x1C, 0x0D)
   2. The HL7 V2 ACK message (I don't know how to switch that off)
 
-You have to send an ACK in the 4 byte version to acknowledge the ACK.
+Once you received that ACK, disconnect the socket and reconnect for the next message. Otherwise funny things happen to the messages you send. 
+Alternatively you can ACK the ACK. I am not sure why, but it works without reconnecting.
 
-
+### Receiving
+Mirth expects an ACK for every message it sends you.
+If MLLP v2 is enabled, it suffices to send the 4 byte ack. 
+Otherwise you must construct an HL7 V2 ACK message.

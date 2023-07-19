@@ -1,7 +1,7 @@
 <channel version="4.3.0">
   <id>bf07f813-12ff-436b-9b22-61b767d336a2</id>
   <nextMetaDataId>5</nextMetaDataId>
-  <name>V2 Test</name>
+  <name>HL7V2_File_Rest_TCP</name>
   <description>This channel reads HL7 V2 Messages from a socket and puts them through to 3 Destinations:
 A file, another TCP socket, a REST endpoint</description>
   <revision>27</revision>
@@ -19,7 +19,7 @@ A file, another TCP socket, a REST endpoint</description>
         <respondAfterProcessing>true</respondAfterProcessing>
         <processBatch>false</processBatch>
         <firstResponse>true</firstResponse>
-        <processingThreads>1</processingThreads>
+        <processingThreads>10</processingThreads>
         <resourceIds class="linked-hash-map">
           <entry>
             <string>Default Resource</string>
@@ -35,7 +35,7 @@ A file, another TCP socket, a REST endpoint</description>
         <useMLLPv2>true</useMLLPv2>
         <ackBytes>06</ackBytes>
         <nackBytes>15</nackBytes>
-        <maxRetries>2</maxRetries>
+        <maxRetries>0</maxRetries>
       </transmissionModeProperties>
       <serverMode>true</serverMode>
       <remoteAddress></remoteAddress>
@@ -365,7 +365,7 @@ A file, another TCP socket, a REST endpoint</description>
           <useMLLPv2>true</useMLLPv2>
           <ackBytes>06</ackBytes>
           <nackBytes>15</nackBytes>
-          <maxRetries>2</maxRetries>
+          <maxRetries>0</maxRetries>
         </transmissionModeProperties>
         <serverMode>false</serverMode>
         <remoteAddress>host.docker.internal</remoteAddress>
@@ -379,8 +379,8 @@ A file, another TCP socket, a REST endpoint</description>
         <keepConnectionOpen>false</keepConnectionOpen>
         <checkRemoteHost>false</checkRemoteHost>
         <responseTimeout>5000</responseTimeout>
-        <ignoreResponse>false</ignoreResponse>
-        <queueOnResponseTimeout>true</queueOnResponseTimeout>
+        <ignoreResponse>true</ignoreResponse>
+        <queueOnResponseTimeout>false</queueOnResponseTimeout>
         <dataTypeBinary>false</dataTypeBinary>
         <charsetEncoding>DEFAULT_ENCODING</charsetEncoding>
         <template>${message.encodedData}</template>
@@ -839,7 +839,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1688979499804</time>
+        <time>1689778009730</time>
         <timezone>Europe/Berlin</timezone>
       </lastModified>
       <pruningSettings>
