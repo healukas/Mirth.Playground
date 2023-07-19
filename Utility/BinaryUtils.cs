@@ -86,15 +86,15 @@ public static class BinaryUtils
 
         if (binary[0] == 0x0B && binary[1] == 0x06 && binary[2] == 0x1C && binary[3] == 0x0D)
         {
-            return "Received ACK";
+            return "Received ACK\n";
         }
         
         if (binary[0] == 0x0B && binary[1] == 0x15 && binary[2] == 0x1C && binary[3] == 0x0D)
         {
-            return "Received NACK";
+            return "Received NACK\n";
         }
 
-        return $"Did not recognize ACK or NACK in message {binary.HexDump(60)}";
+        return $"Did not recognize ACK or NACK in message\n{binary.HexDump()}\n";
 
     }
     
