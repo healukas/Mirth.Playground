@@ -30,16 +30,18 @@ public class Program
                 var receivedPayload = new byte[received];
                 Array.Copy(buffer, 0, receivedPayload, 0, received);
                 Console.WriteLine(receivedPayload.HexDump());
-                var response = new byte[] { 0x0B, 0x06, 0x1C, 0x0D };
-                handler.Send(response, SocketFlags.None);
-                Console.WriteLine("Ack sent");
+                var v2Ack = buildAck().Pack(false,true);
+                var fourByteAck = new byte[] { 0x0B, 0x06, 0x1C, 0x0D };
+                handler.Send(fourByteAck, SocketFlags.None);
+                handler.Send(v2Ack, SocketFlags.None);
+                Console.WriteLine("ACKs sent");
         }
     }
 
     public static string buildAck()
     {
         return
-        "MSH|^~\\&|CERNER|HOSPITAL-?A|x|000000|20230719141859.868|?|ACK|20230719141859.868|P|2.3\\r"+
+        "MSH|^~\\&|CERNER|HOSPITAL-?A|x|xyz|20210719141859.868|?|ACK|20210719141859.868|P|2.3\\r"+
         "MSA|AA|1912340911";
     }
 }
