@@ -32,6 +32,6 @@ services:
       - 5432
       
   rest:
-    image: c0dingcl0wn/debug-rest-endpoint:v1.0.0
+    image: c0dingcl0wn/debug-rest-endpoint:v1.0.1
     ports:
       - "5050:80"
