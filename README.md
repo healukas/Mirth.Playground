@@ -1,45 +1,55 @@
 # Mirth.Playground
 
-This repository contains some things that can be used to learn about mirth. 
-Below, I am collecting, what I have learned.
+## What's in the box?
+This Playground contains some toys to play and experiment with the [opensource Mirth Connect](https://github.com/nextgenhealthcare/connect/). 
+Included are:
+- `MirthSocketClient`: a program that writes HL7 Messages to a Socket
+- `MirthSocketServer`: a program that provides a socket and reads from it
+- `Stack`: a docker stack file running Mirth Connect, a database and a debug rest endpoint (for `HTTPSender` testing). It also includes some channel definitions to import into Mirth Connect.
+- `Documentation`: A collection of Markdown files (and some html files) where I am trying to best describe what I did and what I learned.
 
+### MirthSocketClient
+The `MirthSocketClient` currently always sends the same message with a counter in MSH-3.
+The variables at the top of `MirthSocketClient > Program.cs` can be used to change the behavior. Currently no command line parameters are supported since 
+the program is mostly ran from the IDE. 
 
-## Tools
-This repo contains the following tools: 
-- MirthSocketClient: Writes messages to the socket
-- MirthSocketServer: Receives messages on a socket
-- Utility: Contains a bunch of function to process binary payloads etc
-- Stack: A directory containing some exported channel definitions and a docker stack
-  - The docker stack contains mirth, a database and a rest endpoint that simply logs all the requests it gets.
-- HL7V2_File_Rest_TCP.xml contains a channel configuration for 1 channel with 3 destinations
-  1. A FileWriter
-  2. A TCPSender
-  3. A HTTPSender
+The configurable variables are:
+- `HostName`: the hostname to connect to. This can be an IP Address or a hostname. It will be resolved using DNS.
+- `Port`: the port to connect to
+- `Verbose`: If `true` the sent messages and received messages are written to the Console.
+- `AmountOfMessages`: The number of messages to be sent. 
+- `MsBetweenMessages`: The time between messages in milliseconds.
 
+To start the program, use your IDE or `dotnet run .` in the directory `Mirth.Playground > MirthSocketClient`.
 
+### MirthSocketServer
+The `MirthSocketServer` creates a socket and receives data on that socket. 
 
-## Learnings
-### Sending
-#### ACK
-If you send a message, Mirth will send you 2 ACK messages
-  1. The 4 byte version (0x0B, 0x06, 0x1C, 0x0D)
-  2. The HL7 V2 ACK message (I don't know how to switch that off)
+It can be configured to listen to a specific IP address at a specific port.
+The values can be set in the variables 
+- `HostIp`
+- `Port`
 
-Once you received that ACK, You have to ACK the ACK. Otherwise mirth will throw an exception: 
-```java 
-com.mirth.connect.connectors.tcp.TcpReceiver: Error sending response (TCP Listener "Source" on channel bf07f813-12ff-436b-9b22-61b767d336a2).
- java.io.IOException: Remote socket has closed.
- 	at com.mirth.connect.connectors.tcp.TcpReceiver.sendResponse(TcpReceiver.java:937) ~[tcp-server.jar:?]
- 	at com.mirth.connect.connectors.tcp.TcpReceiver.access$2300(TcpReceiver.java:78) ~[tcp-server.jar:?]
- 	at com.mirth.connect.connectors.tcp.TcpReceiver$TcpReader.call(TcpReceiver.java:696) ~[tcp-server.jar:?]
- 	at com.mirth.connect.connectors.tcp.TcpReceiver$TcpReader.call(TcpReceiver.java:511) ~[tcp-server.jar:?]
- 	at java.util.concurrent.FutureTask.run(Unknown Source) ~[?:?]
- 	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source) ~[?:?]
- 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source) ~[?:?]
- 	at java.lang.Thread.run(Unknown Source) ~[?:?]
+When receiving any payload, the `MirthSocketServer` sends the 4-byte ACK as specified in `Documentation/HL7MLLP/transport_mllp_2019.html`.
+The `MirthSocketServer` runs in an infinite loop until it is terminated by the user (or until an exception occurs for). 
+
+To run it, start it from the IDE or use `dotnet run .` in the directory `Mirth.Playground > MirthSocketServer`.
+
+### Stack
+The current version of the stack includes:
+- Mirth Connect
+- Database
+- A debug rest endpoint that is used for testing the `HTTPSender` in Mirth.
+
+Please keep in mind that the forwarded ports are exactly the ones required for the `MirthSocketClient`. If you intend to change 
+the port in the client, please also open it here, so the port is reachable.
+
+### Documentation
+The `Documentation` directory is set up so that it can be viewed with [docsify](https://docsify.js.org/#/). Alternatively, you can just look at the files in the 
+markdown reader of your choice. 
+
+Once you have [docsify](https://docsify.js.org/#/) installed, go to the root directory of this project and run 
+```shell 
+docsify serve Documentation -p 3000
 ```
-
-### Receiving
-Mirth expects an ACK for every message it sends you.
-If MLLP v2 is enabled, it suffices to send the 4 byte ack. 
-Otherwise you must construct an HL7 V2 ACK message.
+This will start a simple web server rendering the markdown files for you to watch at `localhost:3000`.
