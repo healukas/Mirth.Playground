@@ -37,7 +37,7 @@ public static class BinaryUtils
         return result;
     }
     
-    public static byte[] Pack(this string message, bool useSize = false, bool addCR = false)
+    public static byte[] Pack(this string message, bool useSize = false, bool addCR = true)
     {
         var totalSize = 2; // start at 2 because of the start byte and the end byte
         var messageBytes = Encoding.ASCII.GetBytes(message);
@@ -98,8 +98,32 @@ public static class BinaryUtils
 
     }
     
-    public static string UnpackMessage(this byte[] message, bool useSize = false, bool useCR = false)
+    public static bool Unpack(this byte[] rawMessage, out string message, bool useSize = false, bool useCR = true)
     {
-        return "";
+        message = "";
+        if (rawMessage[0] != 0x0B || rawMessage[rawMessage.Length - 2] != 0x1C || rawMessage[rawMessage.Length - 1] != 0x0D)
+        {
+            return false;
+        }
+
+        var messageStartIndex = 1;
+        var frameLength = 2; // 1 start byte, 1 end bytes
+        if (useSize)
+        {
+            messageStartIndex += 6;
+            frameLength += 6;
+        }
+
+        if (useCR)
+        {
+            frameLength += 1; // add a second end byte
+        }
+
+        var unframedMessage = new byte[rawMessage.Length - frameLength];
+        Array.Copy(rawMessage, messageStartIndex, unframedMessage, 0 ,rawMessage.Length-frameLength);
+        
+        message = Encoding.ASCII.GetString(unframedMessage).ReplaceLineEndings("\n");
+        
+        return true;
     }
 }
