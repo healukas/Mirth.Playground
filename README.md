@@ -1,10 +1,12 @@
 # Mirth.Playground
+Welcome to the Mirth.Playground. I am using this repository to play with and learn about [Mirth Connect](https://github.com/nextgenhealthcare/connect/). 
+I am also documenting my learnings as good as I can. 
 
 ## What's in the box?
-This Playground contains some toys to play and experiment with the [opensource Mirth Connect](https://github.com/nextgenhealthcare/connect/). 
+This Playground contains some toys to play and experiment with [Mirth Connect](https://github.com/nextgenhealthcare/connect/). 
 Included are:
-- `MirthSocketClient`: a program that writes HL7 Messages to a Socket
-- `MirthSocketServer`: a program that provides a socket and reads from it
+- `MirthSocketClient`: a program that writes HL7 Messages to a Socket (Using MLLPv2)
+- `MirthSocketServer`: a program that provides a socket and reads from it (Using MLLPv2)
 - `Stack`: a docker stack file running Mirth Connect, a database and a debug rest endpoint (for `HTTPSender` testing). It also includes some channel definitions to import into Mirth Connect.
 - `Documentation`: A collection of Markdown files (and some html files) where I am trying to best describe what I did and what I learned.
 
