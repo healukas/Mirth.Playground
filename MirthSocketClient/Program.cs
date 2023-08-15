@@ -31,9 +31,10 @@ static class Program
         using Socket client = new(resolvedHost.AddressList.First().AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
         var i = 0;
+        client.ConnectAsync(ipEndpoint);
+
         foreach (var message in messages)
         {
-            client.ConnectAsync(ipEndpoint);
 
             // convert message to binary
             var binaryMessage = message.Pack(false, true);
@@ -66,11 +67,10 @@ static class Program
             
             Console.WriteLine($"Message {i}: Acknowledged ACK");
             
-            client.Disconnect(true);
             i++;
             Thread.Sleep(MsBetweenMessages);
         }
-        
+        client.Disconnect(true);
     }
 
     private static List<string> GetMessages(int number)
