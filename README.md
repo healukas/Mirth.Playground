@@ -46,6 +46,11 @@ The current version of the stack includes:
 Please keep in mind that the forwarded ports are exactly the ones required for the `MirthSocketClient`. If you intend to change 
 the port in the client, please also open it here, so the port is reachable.
 
+### JavaLibs
+A minimal working transformation of the `PID` segment to a basic FHIR Patient resource written in Java.
+This is meant to be used as a custom transformer/preprocessing script. However, even when building it as a fatJar and if it is possible to execute that jar, it currently still fails when using it in Mirth. 
+I have to figure out how to build it such that mirth finds all the dependencies. 
+
 ### Documentation
 The `Documentation` directory is set up so that it can be viewed with [docsify](https://docsify.js.org/#/). Alternatively, you can just look at the files in the 
 markdown reader of your choice. 

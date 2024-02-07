@@ -79,7 +79,7 @@ static class Program
         for(var i = 0; i<number; i++)
         {
             var paddedNumber = i.ToString().PadLeft(6, '0');
-            var message = $"MSH|^~\\&|x|{paddedNumber}|CERNER|HOSPITAL-A|201401291848||ADT^A01|1912340911|P|2.3|||AL|NE|\r\n" +
+            var message = $"MSH|^~\\&|x|aaa-{paddedNumber}|CERNER|HOSPITAL-A|201401291848||ADT^A01|1912340911|P|2.3|||AL|NE|\r\n" +
                           "EVN|A01|201401291848|||REJKB1\r\n" +
                           "PID||ABC123|987654|ALT789|PETTY^TOM^^^^||19781218|M||2106-3|10144 MAPLE AVE^^IRVINE^CA^92614||(949)123-1234|||||0053820452|220675537||AME||||1|||||\r\n" +
                           "PV1||I|S-2302-1^S-2302^A|C|||1111111^PINA|||SUR|||||A0||1111111^PINA|S||S|P||||||||||||||||||IAH|||||201401291848|\r\n" +
